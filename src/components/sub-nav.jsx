@@ -20,7 +20,7 @@ export default function SubNav({ children }) {
           <ul className="grid gap-4 text-sm">
             <li
               className={`flex items-center gap-3 px-3 py-2 rounded-md w-fit ${
-                pathname == "/profile" && "bg-gray-100"
+                pathname == "/profile" ? "bg-gray-100" : ""
               }`}
             >
               <PersonOutlinedIcon fontSize="small" />
@@ -28,7 +28,7 @@ export default function SubNav({ children }) {
             </li>
             <li
               className={`flex items-center gap-3 px-3 py-2 rounded-md w-fit ${
-                pathname == "/review" && "bg-gray-100"
+                pathname == "/review" ? "bg-gray-100" : ""
               }`}
             >
               <FormatListBulletedOutlinedIcon fontSize="small" />
@@ -36,7 +36,15 @@ export default function SubNav({ children }) {
             </li>
             <li
               className={`flex items-center gap-3 px-3 py-2 rounded-md w-fit ${
-                pathname == "/password" && "bg-gray-100"
+                pathname == "/my-restaurant" ? "bg-gray-100" : ""
+              }`}
+            >
+              <FormatListBulletedOutlinedIcon fontSize="small" />
+              <Link to="/my-restaurant">My Restaurant</Link>
+            </li>
+            <li
+              className={`flex items-center gap-3 px-3 py-2 rounded-md w-fit ${
+                pathname == "/password" ? "bg-gray-100" : ""
               }`}
             >
               <LockOpenOutlinedIcon fontSize="small" />
