@@ -1,7 +1,27 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { api } from "../api/api";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [credintial, setCredentials] = useState({ email: "", password: "" });
+
+  async function onLogin(e) {
+    e.preventDefault();
+
+    try {
+      const res = await api.post("/login", {
+        email: credintial.email,
+        password: credintial.password,
+      });
+      console.log(res);
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      if (error.response.status == 404) alert(error.response.data.message);
+    }
+  }
 
   return (
     <div className="flex items-center min-h-screen gap-16">
@@ -17,7 +37,7 @@ export default function Login() {
         <p className="text-gray-400">
           A locale where you discover the finest dining experience
         </p>
-        <div className="mt-8 grid gap-4 max-w-sm">
+        <form className="mt-8 grid gap-4 max-w-sm" onSubmit={onLogin}>
           <label className="form-control w-full">
             <div className="label pt-0">
               <span className="label-text">Email</span>
@@ -26,6 +46,9 @@ export default function Login() {
               type="email"
               placeholder="your-email.com"
               className="input input-bordered w-full"
+              onChange={(e) =>
+                setCredentials((prev) => ({ ...prev, email: e.target.value }))
+              }
             />
           </label>
           <label className="form-control w-full">
@@ -36,9 +59,15 @@ export default function Login() {
               type="password"
               placeholder="your password"
               className="input input-bordered w-full"
+              onChange={(e) =>
+                setCredentials((prev) => ({
+                  ...prev,
+                  password: e.target.value,
+                }))
+              }
             />
           </label>
-          <button className="btn btn-accent" onClick={() => navigate("/")}>
+          <button type="submit" className="btn btn-accent">
             Login
           </button>
           <p className="text-xs text-center">
@@ -47,7 +76,7 @@ export default function Login() {
               Sign up here
             </Link>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   );
