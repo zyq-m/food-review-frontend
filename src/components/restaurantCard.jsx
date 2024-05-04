@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 
-import { restaurant } from "../data/restaurant";
-
-export default function RestaurantCard() {
+export default function RestaurantCard({ restaurant }) {
   return (
     <div className="grid gap-5 grid-cols-4">
       {restaurant?.map((d, i) => {
