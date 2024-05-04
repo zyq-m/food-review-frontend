@@ -10,6 +10,8 @@ import Restaurant from "./pages/restaurant";
 import Profile from "./pages/profile";
 import Password from "./pages/password";
 import Review from "./pages/review";
+import SignupRestaurant from "./pages/sign-up-restaurant";
+import MyRestaurant from "./pages/my-restaurant";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: "/sign-up",
     element: <Signup />,
+  },
+  {
+    path: "/sign-up/restaurant",
+    element: <SignupRestaurant />,
   },
   {
     path: "/restaurant/:restaurantId/:section",
@@ -39,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: "/review",
     element: <Review />,
+  },
+  {
+    path: "/my-restaurant",
+    element: <MyRestaurant />,
   },
 ]);
 
