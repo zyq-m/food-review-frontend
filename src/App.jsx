@@ -25,16 +25,22 @@ export default function App() {
         <Route path="/sign-up" element={<Signup />} />
         <Route path="/sign-up/restaurant" element={<SignupRestaurant />} />
 
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute role={[1]} />}>
           <Route path="/" element={<Main />} />
           <Route
             path="/restaurant/:restaurantId/:section"
             element={<Restaurant />}
           />
+        </Route>
+
+        <Route element={<ProtectedRoute role={[2]} />}>
+          <Route path="/my-restaurant" element={<MyRestaurant />} />
+        </Route>
+
+        <Route element={<ProtectedRoute role={[1, 2]} />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/password" element={<Password />} />
           <Route path="/review" element={<Review />} />
-          <Route path="/my-restaurant" element={<MyRestaurant />} />
         </Route>
       </Routes>
     </UserContext.Provider>

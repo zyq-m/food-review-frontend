@@ -5,10 +5,12 @@ import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
 import Layout from "./layout";
+import useUser from "../hooks/useUser";
 
 export default function SubNav({ children }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { user } = useUser();
 
   return (
     <Layout>
@@ -34,14 +36,16 @@ export default function SubNav({ children }) {
               <FormatListBulletedOutlinedIcon fontSize="small" />
               <Link to="/review">Reviews</Link>
             </li>
-            <li
-              className={`flex items-center gap-3 px-3 py-2 rounded-md w-fit ${
-                pathname == "/my-restaurant" ? "bg-gray-100" : ""
-              }`}
-            >
-              <FormatListBulletedOutlinedIcon fontSize="small" />
-              <Link to="/my-restaurant">My Restaurant</Link>
-            </li>
+            {user?.role_id == 2 && (
+              <li
+                className={`flex items-center gap-3 px-3 py-2 rounded-md w-fit ${
+                  pathname == "/my-restaurant" ? "bg-gray-100" : ""
+                }`}
+              >
+                <FormatListBulletedOutlinedIcon fontSize="small" />
+                <Link to="/my-restaurant">My Restaurant</Link>
+              </li>
+            )}
             <li
               className={`flex items-center gap-3 px-3 py-2 rounded-md w-fit ${
                 pathname == "/password" ? "bg-gray-100" : ""

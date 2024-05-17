@@ -6,8 +6,6 @@ export default function Profile() {
   const { user } = useUser();
   const { register, handleSubmit } = useForm();
 
-  console.log(user);
-
   function onProfile(data) {
     console.log(data);
   }
