@@ -7,14 +7,30 @@ import MenuSection from "../components/restaurant/section/menu";
 import AboutSection from "../components/restaurant/section/about";
 
 import Layout from "../components/layout";
+import { useEffect, useState } from "react";
+import { api } from "../api/api";
 
 export default function Restaurant() {
   const { restaurantId, section } = useParams();
+  const [restaurant, setRestaurant] = useState({});
+
+  useEffect(() => {
+    api
+      .get(`/restaurant/${restaurantId}`)
+      .then((res) => {
+        setRestaurant(res.data.restaurant);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [restaurantId]);
 
   return (
     <Layout>
       <div>
-        <h2 className="text-xl font-semibold">DubuYo</h2>
+        <h2 className="text-xl font-semibold capitalize">
+          {restaurant.restaurant_name}
+        </h2>
         <div className="flex items-center text-yellow-400">
           <span className="text-sm text-gray-500 mr-1">5.0</span>
           <StarOutlinedIcon fontSize="13px" />
@@ -24,30 +40,25 @@ export default function Restaurant() {
           <StarOutlinedIcon fontSize="13px" />
           <span className="text-sm text-gray-500 ml-1">(24)</span>
         </div>
-        <p className="text-sm text-gray-500">Restaurant</p>
+        <p className="text-sm text-gray-500 capitalize">
+          {restaurant.category}
+        </p>
 
         <div className="flex gap-3 mt-2">
-          <div>
-            <img
-              src="https://lh3.googleusercontent.com/p/AF1QipPKsjdubi-AmBizpFcJeTnMGIS-gCfNKtvYB3v_=s1360-w1360-h1020"
-              alt=""
-              className="rounded max-h-[206px]"
-            />
-          </div>
-          <div>
-            <img
-              src="https://lh3.googleusercontent.com/p/AF1QipPst2dReVhV_CpS-FuMBksAeGMN7wFex-G3NWoG=s1360-w1360-h1020"
-              alt=""
-              className="rounded max-h-[206px]"
-            />
-          </div>
-          <div>
-            <img
-              src="https://lh3.googleusercontent.com/p/AF1QipOJiP6C0ZDyA1xzHY-Q06JuawMXV37uTK5hPSwE=s1360-w1360-h1020"
-              alt=""
-              className="rounded max-h-[206px]"
-            />
-          </div>
+          {restaurant?.restaurant_img?.map((d) => {
+            return (
+              <>
+                <div key={d.id}>
+                  <img
+                    src={d.src.original}
+                    alt={d.alt}
+                    className="rounded max-h-[206px]"
+                    loading="lazy"
+                  />
+                </div>
+              </>
+            );
+          })}
         </div>
       </div>
 
@@ -83,9 +94,16 @@ export default function Restaurant() {
       </div>
 
       <div className="grid gap-6">
-        {section === "overview" && <Overview />}
+        {section === "overview" && (
+          <Overview highlight={restaurant?.highlight} />
+        )}
         {section === "reviews" && <Review />}
-        {section === "menu" && <MenuSection />}
+        {section === "menu" && (
+          <MenuSection
+            highlight={restaurant?.highlight}
+            menu={restaurant?.menu_img}
+          />
+        )}
         {section === "about" && <AboutSection />}
       </div>
     </Layout>

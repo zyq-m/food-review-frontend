@@ -1,6 +1,17 @@
 import SubNav from "../components/sub-nav";
+import useUser from "../hooks/useUser";
+import { useForm } from "react-hook-form";
 
 export default function Profile() {
+  const { user } = useUser();
+  const { register, handleSubmit } = useForm();
+
+  console.log(user);
+
+  function onProfile(data) {
+    console.log(data);
+  }
+
   return (
     <SubNav>
       <div className="flex gap-5 items-start">
@@ -10,7 +21,10 @@ export default function Profile() {
           className="h-[100px] rounded-full"
         />
 
-        <div className="flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit(onProfile)}
+          className="flex flex-col gap-4"
+        >
           <label className="form-control w-full">
             <div className="label pt-0">
               <span className="label-text">Name</span>
@@ -19,6 +33,7 @@ export default function Profile() {
               type="text"
               placeholder="your name"
               className="input input-sm input-bordered w-full"
+              {...register("name")}
             />
           </label>
           <label className="form-control w-full">
@@ -29,10 +44,11 @@ export default function Profile() {
               type="email"
               placeholder="your email"
               className="input input-sm input-bordered w-full"
+              {...register("email", { value: user?.email })}
             />
           </label>
           <button className="btn btn-accent btn-sm">Update</button>
-        </div>
+        </form>
       </div>
     </SubNav>
   );

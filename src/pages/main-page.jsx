@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import RestaurantCard from "../components/restaurantCard";
 import { api } from "../api/api";
-import { restaurant } from "../data/restaurant";
 
 export default function Main() {
   const [data, setData] = useState([]);
@@ -11,8 +10,7 @@ export default function Main() {
     api
       .get("/restaurant")
       .then((res) => {
-        console.log(res);
-        setData(res.data);
+        setData(res.data.restaurant);
       })
       .catch((err) => {
         console.error(err);
@@ -30,7 +28,12 @@ export default function Main() {
         <button className="btn btn-sm btn-ghost rounded-badge">Western</button>
       </div>
 
-      <RestaurantCard restaurant={restaurant} />
+      <img
+        src="https://www.pexels.com/photo/food-inside-display-chiller-1855214/"
+        alt=""
+      />
+
+      <RestaurantCard restaurant={data} />
     </Layout>
   );
 }

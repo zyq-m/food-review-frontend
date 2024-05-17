@@ -5,9 +5,7 @@ import Review from "../review";
 import Highlight from "../highlight";
 import RateReview from "../rateReview";
 
-import { highlight } from "../../../data/restaurant";
-
-export default function Overview() {
+export default function Overview({ highlight }) {
   return (
     <>
       <div className="grid gap-2">
@@ -39,7 +37,10 @@ export default function Overview() {
         />
       </div>
 
-      <Highlight img={highlight} />
+      <div>
+        <h3 className="font-medium mb-4">Highlights</h3>
+        <Highlight img={highlight} />
+      </div>
     </>
   );
 }

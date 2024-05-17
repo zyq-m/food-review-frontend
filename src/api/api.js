@@ -3,7 +3,7 @@ import axios from "axios";
 // import { apiUrl } from "../utils/environment";
 
 export const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: import.meta.env.VITE_API,
 });
 
 // Renew token

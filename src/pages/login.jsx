@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../api/api";
+import useUser from "../hooks/useUser";
+import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
   const navigate = useNavigate();
   const [credintial, setCredentials] = useState({ email: "", password: "" });
+  const { setUser } = useUser();
 
   async function onLogin(e) {
     e.preventDefault();
@@ -14,7 +17,12 @@ export default function Login() {
         email: credintial.email,
         password: credintial.password,
       });
-      console.log(res);
+      const token = res.data.access_token;
+      const { sub } = jwtDecode(token);
+      sub.isAuth = true;
+
+      setUser(sub);
+      window.localStorage.setItem("access_token", token);
 
       navigate("/");
     } catch (error) {

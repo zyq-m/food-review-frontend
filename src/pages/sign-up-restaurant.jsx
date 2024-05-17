@@ -123,9 +123,7 @@ export default function SignupRestaurant() {
                 setForm((prev) => ({ ...prev, category: e.target.value }))
               }
             >
-              <option disabled selected>
-                Pick one
-              </option>
+              <option>Pick one</option>
               <option value="op 1">Han Solo</option>
               <option value="op 2">Greedo</option>
             </select>
