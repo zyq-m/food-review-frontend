@@ -1,20 +1,8 @@
 import axios from "axios";
-// import { getObject, storeObject } from "../utils/asyncStorage";
-// import { apiUrl } from "../utils/environment";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API,
 });
-
-// Renew token
-// const renewToken = async () => {
-//   const token = await getObject("token");
-//   const newToken = await api.post("/auth/token", {
-//     refreshToken: token.refreshToken,
-//   });
-
-//   return newToken;
-// };
 
 // Axios interceptor handle access token authentication
 api.interceptors.request.use(
@@ -34,26 +22,34 @@ api.interceptors.request.use(
 
 // // Handle refreshToken
 // // Resource: https://www.thedutchlab.com/insights/using-axios-interceptors-for-refreshing-your-api-token
-// api.interceptors.response.use(
-//   function (response) {
-//     return response;
-//   },
-//   async function (error) {
-//     const originalRequest = error.config;
-//     if (error.response.status === 403 && !originalRequest._retry) {
-//       originalRequest._retry = true;
-//       const newToken = await renewToken();
-//       // Store access token
-//       const oldToken = await getObject("token");
-//       oldToken.accessToken = newToken.data.accessToken;
-//       await storeObject("token", oldToken);
+api.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  async function (error) {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const newToken = await renewToken();
 
-//       axios.defaults.headers.common[
-//         "Authorization"
-//       ] = `Bearer ${newToken.data.accessToken}`;
+      window.localStorage.setItem("access_token", newToken.data.access_token);
 
-//       return api(originalRequest);
-//     }
-//     return Promise.reject(error);
-//   }
-// );
+      api.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${newToken.data.access_token}`;
+
+      return api(originalRequest);
+    }
+    return Promise.reject(error);
+  }
+);
+
+async function renewToken() {
+  return axios({
+    url: `${import.meta.env.VITE_API}/refresh`,
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${window.localStorage.getItem("refresh_token")}`,
+    },
+  });
+}

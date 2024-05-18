@@ -17,12 +17,13 @@ export default function Login() {
         email: credintial.email,
         password: credintial.password,
       });
-      const token = res.data.access_token;
-      const { sub } = jwtDecode(token);
+      const token = res.data;
+      const { sub } = jwtDecode(token.access_token);
       sub.isAuth = true;
 
       setUser(sub);
-      window.localStorage.setItem("access_token", token);
+      window.localStorage.setItem("access_token", token.access_token);
+      window.localStorage.setItem("refresh_token", token.refresh_token);
 
       navigate("/");
     } catch (error) {
