@@ -1,12 +1,24 @@
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import useUser from "../../hooks/useUser";
+import { humanize } from "../../utils/date";
 
 export default function Review({ reviews }) {
+  const { user } = useUser();
+
+  if (!reviews?.length) {
+    return (
+      <>
+        <h2>Now review history yet</h2>
+      </>
+    );
+  }
+
   return (
     <div className="grid gap-5">
       {reviews?.map((d, i) => {
         return (
-          <div key={i}>
+          <div key={d.review_id}>
             <div className="flex gap-1 items-center">
               <img
                 src="https://static1.squarespace.com/static/656f4e4dababbd7c042c4946/657236350931ee4538eea52c/65baf15103d8ad2826032a8a/1707422532886/how-to-stop-being-a-people-pleaser-1_1.jpg?format=1500w"
@@ -27,10 +39,10 @@ export default function Review({ reviews }) {
                 <StarOutlinedIcon fontSize="13px" />
                 <StarOutlinedIcon fontSize="13px" />
               </div>
-              <p className="text-gray-400 text-xs">2 months ago</p>
+              <p className="text-gray-400 text-xs">{humanize(d.timestamp)}</p>
             </div>
 
-            <p className="text-sm">{d.review}</p>
+            <p className="text-sm">{d.review_description}</p>
 
             {d.edit && (
               <button className="btn btn-xs btn-ghost text-gray-400">

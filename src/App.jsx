@@ -7,15 +7,28 @@ import Main from "./pages/main-page";
 import Restaurant from "./pages/restaurant";
 import Profile from "./pages/profile";
 import Password from "./pages/password";
-import Review from "./pages/review";
+import ReviewPage from "./pages/review";
 import SignupRestaurant from "./pages/sign-up-restaurant";
 import MyRestaurant from "./pages/my-restaurant";
 import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 import ProtectedRoute from "./components/protectedRoute";
 
 export default function App() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(checkUser());
+
+  function checkUser() {
+    try {
+      const token = window.localStorage.getItem("access_token");
+      const { sub } = jwtDecode(token);
+      sub.isAuth = true;
+
+      return sub;
+    } catch (error) {
+      return {};
+    }
+  }
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
@@ -40,7 +53,7 @@ export default function App() {
         <Route element={<ProtectedRoute role={[1, 2]} />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/password" element={<Password />} />
-          <Route path="/review" element={<Review />} />
+          <Route path="/review" element={<ReviewPage />} />
         </Route>
       </Routes>
     </UserContext.Provider>

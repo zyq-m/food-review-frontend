@@ -10,7 +10,13 @@ import useUser from "../hooks/useUser";
 export default function SubNav({ children }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { user } = useUser();
+  const { user, setUser } = useUser();
+
+  function onLogout() {
+    setUser({});
+    window.localStorage.clear();
+    navigate("/login");
+  }
 
   return (
     <Layout>
@@ -55,10 +61,7 @@ export default function SubNav({ children }) {
               <Link to="/password">Password</Link>
             </li>
           </ul>
-          <button
-            className="btn btn-error btn-sm w-fit"
-            onClick={() => navigate("/login")}
-          >
+          <button className="btn btn-error btn-sm w-fit" onClick={onLogout}>
             <LogoutOutlinedIcon fontSize="small" />
             Logout
           </button>

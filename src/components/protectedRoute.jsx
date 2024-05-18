@@ -1,8 +1,10 @@
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import useUser from "../hooks/useUser";
+import { jwtDecode } from "jwt-decode";
+import { useEffect } from "react";
 
 export default function ProtectedRoute({ role }) {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const navigate = useNavigate();
 
   if (user?.isAuth) {

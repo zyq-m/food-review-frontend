@@ -1,13 +1,20 @@
 import SubNav from "../components/sub-nav";
 import useUser from "../hooks/useUser";
 import { useForm } from "react-hook-form";
+import { api } from "../api/api";
 
 export default function Profile() {
   const { user } = useUser();
   const { register, handleSubmit } = useForm();
 
-  function onProfile(data) {
-    console.log(data);
+  async function onProfile(data) {
+    try {
+      const res = await api.put(`/user/profile/${user.user_name}`, {
+        email: data.email,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -45,7 +52,9 @@ export default function Profile() {
               {...register("email", { value: user?.email })}
             />
           </label>
-          <button className="btn btn-accent btn-sm">Update</button>
+          <button type="submit" className="btn btn-accent btn-sm">
+            Update
+          </button>
         </form>
       </div>
     </SubNav>

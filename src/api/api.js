@@ -16,21 +16,21 @@ export const api = axios.create({
 //   return newToken;
 // };
 
-// // Axios interceptor handle access token authentication
-// api.interceptors.request.use(
-//   async function (config) {
-//     const token = await getObject("token");
-//     if (token) {
-//       config.headers["Authorization"] = `Bearer ${token?.accessToken}`;
-//     }
+// Axios interceptor handle access token authentication
+api.interceptors.request.use(
+  async function (config) {
+    const token = window.localStorage.getItem("access_token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
 
-//     return config;
-//   },
-//   function (error) {
-//     // Do something with request error
-//     return Promise.reject(error);
-//   }
-// );
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
 
 // // Handle refreshToken
 // // Resource: https://www.thedutchlab.com/insights/using-axios-interceptors-for-refreshing-your-api-token
