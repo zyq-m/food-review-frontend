@@ -1,5 +1,6 @@
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { humanize } from "../../utils/date";
 import { useEffect, useState } from "react";
 import { api } from "../../api/api";
@@ -53,6 +54,18 @@ export default function Review({ reviews, edit }) {
         return { ...d };
       })
     );
+  }
+
+  async function onDelete(id) {
+    try {
+      const res = await api.delete(`/review/delete/${id}`);
+      setData((prev) => prev.filter((d) => d.review_id !== id));
+      setModal({ title: "Message", description: res.data.message });
+      openModal();
+    } catch (error) {
+      setModal({ title: "Error", description: error.response.data.message });
+      openModal();
+    }
   }
 
   useEffect(() => {
@@ -117,13 +130,22 @@ export default function Review({ reviews, edit }) {
               )}
 
               {edit && !d.selected && (
-                <button
-                  className="btn btn-xs btn-ghost text-gray-400"
-                  onClick={() => onTarget(d.review_id)}
-                >
-                  <EditOutlinedIcon fontSize="5px" />
-                  Edit review
-                </button>
+                <div className="flex justify-between mt-1">
+                  <button
+                    className="btn btn-xs btn-ghost text-gray-400"
+                    onClick={() => onTarget(d.review_id)}
+                  >
+                    <EditOutlinedIcon fontSize="5px" />
+                    Edit review
+                  </button>
+                  <button
+                    className="btn btn-xs btn-ghost text-red-400"
+                    onClick={() => onDelete(d.review_id)}
+                  >
+                    <DeleteOutlineOutlinedIcon fontSize="5px" />
+                    Delete review
+                  </button>
+                </div>
               )}
             </div>
           );
