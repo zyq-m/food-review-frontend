@@ -20,7 +20,7 @@ export default function Password() {
     <SubNav>
       <form
         onSubmit={handleSubmit(onChangePassword)}
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-4 max-w-48"
       >
         <label className="form-control w-full">
           <div className="label pt-0">

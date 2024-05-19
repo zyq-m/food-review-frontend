@@ -93,16 +93,16 @@ export default function Review({ reviews, edit }) {
               ) : (
                 <form onSubmit={onEdit}>
                   <textarea
-                    className="textarea textarea-sm"
+                    className="textarea textarea-sm w-full"
                     value={d.edited_review}
                     onChange={onText}
                   ></textarea>
-                  <div className="flex justify-end">
+                  <div className="flex justify-end gap-1">
                     <button className="btn btn-xs" type="submit">
                       Done
                     </button>
                     <button
-                      className="btn btn-xs"
+                      className="btn btn-xs btn-error"
                       type="button"
                       onClick={() =>
                         setData((prev) =>

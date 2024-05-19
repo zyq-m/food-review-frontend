@@ -22,7 +22,7 @@ export default function SubNav({ children }) {
     <Layout>
       <div className="flex">
         <nav
-          className="w-[169px] flex flex-col justify-between"
+          className="w-[169p] flex flex-col justify-between border-r-2 pr-5 mr-5"
           style={{ height: "calc(100vh - 144px)" }}
         >
           <ul className="grid gap-4 text-sm">
@@ -66,8 +66,8 @@ export default function SubNav({ children }) {
             Logout
           </button>
         </nav>
-        <div className="divider divider-horizontal"></div>
-        <div>{children}</div>
+        {/* <div className="divider divider-horizontal"></div> */}
+        <div className="flex-1">{children}</div>
       </div>
     </Layout>
   );
