@@ -14,7 +14,13 @@ export default function ReviewPage() {
     api
       .get(`/user/${user.user_name}/review`)
       .then((res) => {
-        setReview(res.data.review);
+        setReview(
+          res.data.review.map((d) => ({
+            ...d,
+            selected: false,
+            edited_review: d.review_description,
+          }))
+        );
       })
       .catch((err) => {
         console.error(err);
@@ -23,7 +29,7 @@ export default function ReviewPage() {
 
   return (
     <SubNav>
-      <Review reviews={review} />
+      <Review reviews={review} edit={true} />
     </SubNav>
   );
 }
