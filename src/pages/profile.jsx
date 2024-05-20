@@ -12,7 +12,8 @@ export default function Profile() {
 
   async function onProfile(data) {
     try {
-      const res = await await api.put(`/user/profile/${user.user_name}`, data);
+      const res = await api.put(`/user/profile/${user.user_name}`, data);
+      setUser((prev) => ({ ...prev, name: res.data.user.name }));
     } catch (error) {
       console.log(error);
     }
@@ -84,7 +85,7 @@ export default function Profile() {
               type="text"
               placeholder="your name"
               className="input input-sm input-bordered w-full"
-              {...register("name")}
+              {...register("name", { value: user?.name })}
             />
           </label>
           <label className="form-control w-full">
