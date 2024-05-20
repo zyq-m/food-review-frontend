@@ -2,29 +2,75 @@ import SubNav from "../components/sub-nav";
 import useUser from "../hooks/useUser";
 import { useForm } from "react-hook-form";
 import { api } from "../api/api";
+import { useState } from "react";
 
 export default function Profile() {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const { register, handleSubmit } = useForm();
+  const [temp, setTemp] = useState(""); // temporary avatar
+  const url = import.meta.env.VITE_API;
 
   async function onProfile(data) {
     try {
-      const res = await api.put(`/user/profile/${user.user_name}`, {
-        email: data.email,
-      });
+      const res = await await api.put(`/user/profile/${user.user_name}`, data);
     } catch (error) {
       console.log(error);
     }
   }
 
+  async function avatar(data) {
+    try {
+      const formData = new FormData();
+      formData.append("avatar", data.avatar[0]);
+
+      const res = await await api.put(
+        `/user/profile/${user.user_name}`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      setUser((prev) => ({ ...prev, avatar: res.data.avatar }));
+      setTemp("");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <SubNav>
-      <div className="flex gap-5 items-start">
-        <img
-          src="https://static1.squarespace.com/static/656f4e4dababbd7c042c4946/657236350931ee4538eea52c/65baf15103d8ad2826032a8a/1707422532886/how-to-stop-being-a-people-pleaser-1_1.jpg?format=1500w"
-          alt=""
-          className="h-[100px] rounded-full"
-        />
+      <div className="flex gap-8 items-start">
+        <form onSubmit={handleSubmit(avatar)}>
+          {temp ? (
+            <img
+              src={temp}
+              alt=""
+              className="h-[100px] w-[100px] object-cover rounded-full"
+              onClick={() => window.document.getElementById("avatar").click()}
+            />
+          ) : (
+            <img
+              src={
+                user.avatar ? `${url}/${user.avatar?.src}` : "/user-profile.jpg"
+              }
+              alt=""
+              className="h-[100px] w-[100px] object-cover rounded-full"
+              onClick={() => window.document.getElementById("avatar").click()}
+            />
+          )}
+          <input
+            id="avatar"
+            type="file"
+            className="hidden"
+            accept="image/*"
+            {...register("avatar", {
+              onChange: (data) => {
+                setTemp(URL.createObjectURL(data.target.files[0]));
+              },
+            })}
+          />
+          <button type="submit" className="btn btn-sm w-full mt-2">
+            Upload
+          </button>
+        </form>
 
         <form
           onSubmit={handleSubmit(onProfile)}

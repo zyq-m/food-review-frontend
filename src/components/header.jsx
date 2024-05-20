@@ -1,6 +1,26 @@
 import { Link } from "react-router-dom";
+import useUser from "../hooks/useUser";
+import { useEffect } from "react";
+import { api } from "../api/api";
 
 export default function Header() {
+  const { user, setUser } = useUser();
+  const url = import.meta.env.VITE_API;
+
+  useEffect(() => {
+    !user?.avatar &&
+      api.get(`/user/profile/${user.user_name}`).then((res) => {
+        const data = res.data.user;
+
+        setUser((prev) => ({
+          ...prev,
+          email: data.email,
+          avatar: data.avatar,
+          name: data.name,
+        }));
+      });
+  }, [user?.avatar]);
+
   return (
     <nav className="flex justify-between my-6">
       <Link to="/" className="text-xl font-extrabold">
@@ -26,9 +46,11 @@ export default function Header() {
         <div>
           <Link to="/profile">
             <img
-              src="https://static1.squarespace.com/static/656f4e4dababbd7c042c4946/657236350931ee4538eea52c/65baf15103d8ad2826032a8a/1707422532886/how-to-stop-being-a-people-pleaser-1_1.jpg?format=1500w"
+              src={
+                user.avatar ? `${url}/${user.avatar.src}` : "/user-profile.jpg"
+              }
               alt=""
-              className="w-8 h-8 rounded-full"
+              className="w-8 h-8 object-cover rounded-full"
             />
           </Link>
         </div>

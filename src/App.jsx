@@ -22,9 +22,8 @@ export default function App() {
     try {
       const token = window.localStorage.getItem("access_token");
       const { sub } = jwtDecode(token);
-      sub.isAuth = true;
 
-      return sub;
+      return { isAuth: true, user_name: sub.user_name, role_id: sub.role_id };
     } catch (error) {
       return {};
     }
