@@ -94,17 +94,10 @@ export default function Restaurant() {
       </div>
 
       <div className="grid gap-6">
-        {section === "overview" && (
-          <Overview highlight={restaurant?.highlight} />
-        )}
-        {section === "reviews" && <Review />}
-        {section === "menu" && (
-          <MenuSection
-            highlight={restaurant?.highlight}
-            menu={restaurant?.menu_img}
-          />
-        )}
-        {section === "about" && <AboutSection />}
+        {section === "overview" && <Overview restaurant={restaurant} />}
+        {section === "reviews" && <Review restaurant={restaurant} />}
+        {section === "menu" && <MenuSection restaurant={restaurant} />}
+        {section === "about" && <AboutSection restaurant={restaurant} />}
       </div>
     </Layout>
   );

@@ -4,28 +4,22 @@ import RestaurantMenuOutlinedIcon from "@mui/icons-material/RestaurantMenuOutlin
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 
-export default function AboutSection() {
+export default function AboutSection({ restaurant }) {
   return (
     <>
       <div>
         <h3 className="font-medium">From the owners</h3>
-        <p className="text-gray-500 text-sm">
-          “Serving #SeolAwesome Urban Korean Food”
-        </p>
+        <p className="text-gray-500 text-sm">“{restaurant?.description}”</p>
       </div>
 
       <div className="grid gap-2">
         <div className="flex items-center gap-6">
           <LocationOnOutlinedIcon />
-          <p className="text-gray-500 text-xs">
-            Simpang 3 Pengkalan Kubur, 22200 Besut, Terengganu
-          </p>
+          <p className="text-gray-500 text-xs">{restaurant?.location}</p>
         </div>
         <div className="flex items-center gap-6">
           <AccessTimeOutlinedIcon />
-          <p className="text-gray-500 text-xs">
-            Opens &gt; Sunday - Friday (6:00 PM-10:00 PM)
-          </p>
+          <p className="text-gray-500 text-xs">{restaurant?.restaurant_open}</p>
         </div>
         <div className="flex items-center gap-6">
           <RestaurantMenuOutlinedIcon />
@@ -33,11 +27,11 @@ export default function AboutSection() {
         </div>
         <div className="flex items-center gap-6">
           <LocalPhoneOutlinedIcon />
-          <p className="text-gray-500 text-xs">011-110 0011</p>
+          <p className="text-gray-500 text-xs">{restaurant?.phone_no}</p>
         </div>
         <div className="flex items-center gap-6">
           <LanguageOutlinedIcon />
-          <p className="text-gray-500 text-xs">lapor.com</p>
+          <p className="text-gray-500 text-xs">{restaurant?.website_link}</p>
         </div>
       </div>
     </>
