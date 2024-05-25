@@ -1,31 +1,71 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import Layout from "../components/layout";
 import RestaurantCard from "../components/restaurantCard";
 import { api } from "../api/api";
 
 export default function Main() {
   const [data, setData] = useState([]);
+  const id = useId();
+  const [category, setCategory] = useState([]);
 
   useEffect(() => {
-    api
-      .get("/restaurant")
-      .then((res) => {
-        setData(res.data.restaurant);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    async function fetchData() {
+      try {
+        const res = await Promise.all([
+          api.get("/restaurant"),
+          api.get("/restaurant/category"),
+        ]);
+
+        setData(res[0].data.restaurant);
+        setCategory(() =>
+          [{ id: id, name: "all", selected: true }].concat(
+            res[1].data.category.map((d) => ({ ...d, selected: false }))
+          )
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchData();
   }, []);
+
+  async function onCategory(id, category) {
+    setCategory((prev) =>
+      prev.map((d) => {
+        if (d.id === id) return { ...d, selected: true };
+        return { ...d, selected: false };
+      })
+    );
+
+    try {
+      const res = await api.get("/restaurant/search", {
+        params: {
+          category: category,
+        },
+      });
+      setData(res.data.restaurant);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <Layout>
       <div className="flex gap-2 justify-center mb-9">
-        <button className="btn btn-sm rounded-badge">Restaurant</button>
-        <button className="btn btn-sm btn-ghost rounded-badge">Seafood</button>
-        <button className="btn btn-sm btn-ghost rounded-badge">
-          Hamburger
-        </button>
-        <button className="btn btn-sm btn-ghost rounded-badge">Western</button>
+        {category?.map((d) => {
+          return (
+            <button
+              key={d.id}
+              className={`capitalize btn btn-sm rounded-badge ${
+                !d.selected && "btn-ghost"
+              }`}
+              onClick={() => onCategory(d.id, d.name)}
+            >
+              {d.name}
+            </button>
+          );
+        })}
       </div>
 
       <img
