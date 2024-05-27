@@ -1,11 +1,10 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import RestaurantCard from "../components/restaurantCard";
 import { api } from "../api/api";
 
 export default function Main() {
   const [data, setData] = useState([]);
-  const id = useId();
   const [category, setCategory] = useState([]);
 
   useEffect(() => {
@@ -18,9 +17,12 @@ export default function Main() {
 
         setData(res[0].data.restaurant);
         setCategory(() =>
-          [{ id: id, name: "all", selected: true }].concat(
-            res[1].data.category.map((d) => ({ ...d, selected: false }))
-          )
+          res[1].data.category.map((d) => {
+            if (d.name === "all") {
+              return { ...d, selected: true };
+            }
+            return { ...d, selected: false };
+          })
         );
       } catch (error) {
         console.log(error);
