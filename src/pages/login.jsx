@@ -25,7 +25,11 @@ export default function Login() {
       window.localStorage.setItem("access_token", token.access_token);
       window.localStorage.setItem("refresh_token", token.refresh_token);
 
-      navigate("/");
+      if (sub?.role_id === 2) {
+        navigate("/my-restaurant");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       console.log(error);
       if (error.response.status == 404) alert(error.response.data.message);
