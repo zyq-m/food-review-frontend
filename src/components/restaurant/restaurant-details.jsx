@@ -1,17 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { api } from "../../api/api";
+import useUser from "../../hooks/useUser";
 
-export default function RestaurantDetails() {
+export default function RestaurantDetails({ restaurant }) {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
+  const [category, setCategory] = useState([]);
+  const { user } = useUser();
 
-  function onUpdate(data) {
-    console.log(data);
-    console.log(errors);
+  async function onUpdate(data) {
+    try {
+      await api.put(`/my-restaurant/${user.email}`, data);
+    } catch (err) {
+      console.log(err);
+    }
   }
+
+  useEffect(() => {
+    api
+      .get("/restaurant/category")
+      .then((res) => {
+        setCategory(res.data.category.slice(1));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    setValue("restaurant_name", restaurant.restaurant_name);
+    setValue("category", restaurant.category);
+    setValue("phone_no", restaurant.phone_no);
+    setValue("wesbite_link", restaurant.website_link);
+    setValue("location", restaurant.location);
+    setValue("description", restaurant.description);
+  }, [restaurant]);
 
   return (
     <form onSubmit={handleSubmit(onUpdate)} className="mb-6">
@@ -37,9 +63,13 @@ export default function RestaurantDetails() {
             className="select select-bordered select-sm"
             {...register("category", { required: true })}
           >
-            <option value="">Pick one</option>
-            <option value="op 1">Han Solo</option>
-            <option value="op 2">Greedo</option>
+            {category?.map((d) => {
+              return (
+                <option key={d.id} value={d.name} className="capitalize">
+                  {d.name}
+                </option>
+              );
+            })}
           </select>
         </label>
         <label className="form-control w-full col-span-2">
@@ -82,7 +112,7 @@ export default function RestaurantDetails() {
           <textarea
             className="textarea textarea-bordered h-24 textarea-sm"
             placeholder="Tell us about your restaurant"
-            {...register("location")}
+            {...register("description")}
           ></textarea>
         </label>
       </div>
