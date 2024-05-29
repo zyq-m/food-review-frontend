@@ -12,7 +12,7 @@ export default function MyRestaurant() {
   useEffect(() => {
     user?.email &&
       api
-        .get(`/my-restaurant/${user.email}`)
+        .get(`/my-restaurant/${user.restaurant_id}`)
         .then((res) => {
           setRestaurant(res.data.restaurant);
         })

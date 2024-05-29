@@ -11,25 +11,37 @@ export default function ReviewPage() {
   const [review, setReview] = useState([]);
 
   useEffect(() => {
-    api
-      .get(`/user/${user.user_name}/review`)
-      .then((res) => {
-        setReview(
-          res.data.review.map((d) => ({
-            ...d,
-            selected: false,
-            edited_review: d.review_description,
-          }))
-        );
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [user.user_name]);
+    const fetchData = async () => {
+      let url;
+
+      if (user.role_id == 2) {
+        url = `/restaurant/${user.restaurant_id}/review`;
+      } else {
+        url = `/user/${user.user_name}/review`;
+      }
+
+      api
+        .get(url)
+        .then((res) => {
+          setReview(
+            res.data.review.map((d) => ({
+              ...d,
+              selected: false,
+              edited_review: d.review_description,
+            }))
+          );
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+
+    fetchData();
+  }, [user.role_id]);
 
   return (
     <SubNav>
-      <Review reviews={review} edit={true} />
+      <Review reviews={review} edit={user.role_id == 2 ? false : true} />
     </SubNav>
   );
 }
